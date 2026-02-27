@@ -253,6 +253,9 @@ class CloudflareMailClient:
                             else:
                                 import re
                                 raw_time = re.sub(r"(\.\d{6})\d+", r"\1", str(raw_time))
+                                # cfmail 的 created_at 是 UTC 无时区标记，显式加 +00:00 再转本地时间
+                                if not raw_time.endswith("Z") and "+" not in raw_time and raw_time.count("-") <= 2:
+                                    raw_time = raw_time + "+00:00"
                                 msg_time = datetime.fromisoformat(raw_time.replace("Z", "+00:00")).astimezone().replace(tzinfo=None)
                             if msg_time < since_time:
                                 continue
