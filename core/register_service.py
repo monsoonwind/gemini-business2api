@@ -176,15 +176,16 @@ class RegisterService(BaseTaskService[RegisterTask]):
 
         log_cb("info", f"✅ 邮箱注册成功: {client.email}")
 
+        browser_mode = (config.basic.browser_mode or "normal").strip().lower()
         headless = config.basic.browser_headless
         proxy_for_auth, _ = parse_proxy_setting(config.basic.proxy_for_auth)
 
-        log_cb("info", f"🌐 步骤 2/3: 启动浏览器 (无头模式={headless})...")
+        log_cb("info", f"🌐 步骤 2/3: 启动浏览器 (模式={browser_mode}, 无头={headless})...")
 
         automation = GeminiAutomation(
             user_agent=self.user_agent,
             proxy=proxy_for_auth,
-            headless=headless,
+            browser_mode=browser_mode,
             log_callback=log_cb,
         )
         # 允许外部取消时立刻关闭浏览器

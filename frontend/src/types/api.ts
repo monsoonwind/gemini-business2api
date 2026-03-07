@@ -107,6 +107,7 @@ export interface Settings {
     cfmail_verify_ssl?: boolean
     cfmail_domain?: string
     browser_engine?: string
+    browser_mode?: 'normal' | 'silent' | 'headless'
     browser_headless?: boolean
     refresh_window_hours?: number
     register_default_count?: number

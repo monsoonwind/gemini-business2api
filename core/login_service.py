@@ -288,14 +288,15 @@ class LoginService(BaseTaskService[LoginTask]):
         else:
             return {"success": False, "email": account_id, "error": f"不支持的邮件提供商: {mail_provider}"}
 
+        browser_mode = (config.basic.browser_mode or "normal").strip().lower()
         headless = config.basic.browser_headless
 
-        log_cb("info", f"🌐 启动浏览器 (无头模式={headless})...")
+        log_cb("info", f"🌐 启动浏览器 (模式={browser_mode}, 无头={headless})...")
 
         automation = GeminiAutomation(
             user_agent=self.user_agent,
             proxy=proxy_for_auth,
-            headless=headless,
+            browser_mode=browser_mode,
             log_callback=log_cb,
         )
         # 允许外部取消时立刻关闭浏览器
